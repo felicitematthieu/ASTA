@@ -1,0 +1,181 @@
+-- Création de la base de données
+CREATE DATABASE IF NOT EXISTS Base_ASTA;
+DEFAULT CHARACTER SET utf8mb4
+DEFAULT COLLATE utf8mb4_general_ci;
+
+USE Base_ASTA;
+
+-- Table Entreprise
+CREATE TABLE IF NOT EXISTS entreprise (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    raison_sociale VARCHAR(255) NOT NULL,
+    adresse TEXT,
+    informations_acces TEXT
+);
+
+-- Table Apprenti (avec entreprise_id en clé étrangère)
+CREATE TABLE IF NOT EXISTS apprenti (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    programme VARCHAR(100),
+    annee_academique VARCHAR(20),
+    majeure VARCHAR(100),
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
+    telephone VARCHAR(10) CHECK (telephone REGEXP '^[0-9]{10}$'),
+    entreprise_id INT NOT NULL,
+    archive BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE RESTRICT
+);
+
+-- Table MaitreApprentissage
+CREATE TABLE IF NOT EXISTS maitre_apprentissage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
+    poste VARCHAR(100),
+    email VARCHAR(255),
+    telephone VARCHAR(10) CHECK (telephone REGEXP '^[0-9]{10}$'),
+    remarques TEXT,
+    entreprise_id INT,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+-- Table Mission
+CREATE TABLE IF NOT EXISTS mission (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mots_cles TEXT,
+    metier_cible VARCHAR(255),
+    apprenti_id INT,
+    FOREIGN KEY (apprenti_id) REFERENCES apprenti(id) ON DELETE CASCADE
+);
+
+-- Table Visite
+CREATE TABLE IF NOT EXISTS visite (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    commentaires TEXT,
+    date_visite DATE,
+    format_visite ENUM('Visio', 'Présentiel'),
+    apprenti_id INT,
+    FOREIGN KEY (apprenti_id) REFERENCES apprenti(id) ON DELETE CASCADE
+);
+
+-- Table EvaluationEcole
+CREATE TABLE IF NOT EXISTS evaluation_ecole (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    apprenti_id INT,
+    FOREIGN KEY (apprenti_id) REFERENCES apprenti(id) ON DELETE CASCADE
+);
+
+-- Table pour le mémoire/rapport
+CREATE TABLE IF NOT EXISTS memoire_evaluation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    evaluation_id INT,
+    theme_sujet TEXT,
+    note DECIMAL(4,2),
+    commentaires TEXT,
+    FOREIGN KEY (evaluation_id) REFERENCES evaluation_ecole(id) ON DELETE CASCADE
+);
+
+-- Table pour la soutenance
+CREATE TABLE IF NOT EXISTS soutenance_evaluation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    evaluation_id INT,
+    date_soutenance DATE,
+    note DECIMAL(4,2),
+    commentaires TEXT,
+    FOREIGN KEY (evaluation_id) REFERENCES evaluation_ecole(id) ON DELETE CASCADE
+);
+
+-- Table Remarques
+CREATE TABLE IF NOT EXISTS remarques (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    contenu TEXT,
+    apprenti_id INT,
+    FOREIGN KEY (apprenti_id) REFERENCES apprenti(id) ON DELETE CASCADE
+);
+
+-- Table TuteurEnseignant
+CREATE TABLE IF NOT EXISTS tuteur_enseignant (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
+    telephone VARCHAR(10) CHECK (telephone REGEXP '^[0-9]{10}$')
+);
+-- Table FeedbackTuteur
+CREATE TABLE IF NOT EXISTS feedback_tuteur (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    commentaires TEXT,
+    tuteur_enseignant_id INT,
+    apprenti_id INT,
+    FOREIGN KEY (tuteur_enseignant_id) REFERENCES tuteur_enseignant(id) ON DELETE CASCADE,
+    FOREIGN KEY (apprenti_id) REFERENCES apprenti(id) ON DELETE CASCADE
+);
+
+
+
+-- 1. Insertion des entreprises
+INSERT INTO entreprise (raison_sociale, adresse, informations_acces) VALUES
+('TechInnov Solutions', '123 Avenue des Champs-Élysées, 75008 Paris', 'Badge visiteur à récupérer à l''accueil, étage 3'),
+('DataFlow SAS', '45 Rue de la République, 69002 Lyon', 'Présenter pièce d''identité, ascenseur B, étage 5'),
+('WebCraft Studio', '78 Boulevard Haussmann, 13006 Marseille', 'Badge permanent, tour sud, étage 7');
+
+-- 2. Insertion des apprentis
+INSERT INTO apprenti (programme, annee_academique, majeure, nom, prenom, email, telephone, entreprise_id, archive) VALUES
+('M2-PRO', '2023-2024', 'Digital Transformation', 'Martin', 'Lucas', 'lucas.martin@email.com', '0612345678', 1, FALSE),
+('M2-PRO', '2023-2024', 'Data Science', 'Bernard', 'Emma', 'emma.bernard@email.com', '0623456789', 2, FALSE),
+('M2-PRO', '2023-2024', 'Cloud Computing', 'Dubois', 'Hugo', 'hugo.dubois@email.com', '0634567890', 3, FALSE),
+('M2-PRO', '2022-2023', 'Digital Transformation', 'Moreau', 'Léa', 'lea.moreau@email.com', '0645678901', 1, TRUE);
+
+-- 3. Insertion des maîtres d'apprentissage
+INSERT INTO maitre_apprentissage (nom, prenom, poste, email, telephone, remarques, entreprise_id) VALUES
+('Petit', 'Sophie', 'Lead DevOps Engineer', 'sophie.petit@techinnov.com', '0678901234', 'Disponible le jeudi après-midi', 1),
+('Roux', 'Thomas', 'Data Engineering Manager', 'thomas.roux@dataflow.com', '0689012345', 'Préfère les réunions le matin', 2),
+('Garcia', 'Antoine', 'CTO', 'antoine.garcia@webcraft.com', '0690123456', 'Flexible sur les horaires', 3);
+
+-- 4. Insertion des missions
+INSERT INTO mission (mots_cles, metier_cible, apprenti_id) VALUES
+('DevOps, CI/CD, Docker, Kubernetes', 'DevOps Engineer', 1),
+('Python, SQL, Machine Learning, Data Pipeline', 'Data Scientist', 2),
+('Node.js, React, AWS, Microservices', 'Full Stack Developer', 3);
+
+-- 5. Insertion des visites
+INSERT INTO visite (commentaires, date_visite, format_visite, apprenti_id) VALUES
+('Bon progrès sur l''intégration continue, à travailler sur les tests automatisés', '2024-01-15', 'Présentiel', 1),
+('Excellente maîtrise des concepts de ML, projet bien avancé', '2024-02-20', 'Visio', 2),
+('Architecture microservices bien conçue, bonnes pratiques DevOps respectées', '2024-03-10', 'Présentiel', 3);
+
+-- 6. Insertion des évaluations école
+INSERT INTO evaluation_ecole (apprenti_id) VALUES
+(1), (2), (3);
+
+-- 7. Insertion des mémoires
+INSERT INTO memoire_evaluation (evaluation_id, theme_sujet, note, commentaires) VALUES
+(1, 'Implémentation d''une pipeline CI/CD pour applications microservices', 16.5, 'Travail approfondi, bonne analyse des outils'),
+(2, 'Optimisation des modèles de machine learning pour la prédiction de séries temporelles', 17.0, 'Approche innovante, résultats convaincants'),
+(3, 'Développement d''une architecture serverless avec monitoring avancé', 15.5, 'Bon travail technique, manque de recul sur les coûts');
+
+-- 8. Insertion des soutenances
+INSERT INTO soutenance_evaluation (evaluation_id, date_soutenance, note, commentaires) VALUES
+(1, '2024-06-15', 15.0, 'Présentation claire, bonnes réponses aux questions'),
+(2, '2024-06-16', 16.5, 'Excellente maîtrise du sujet, démonstration convaincante'),
+(3, '2024-06-17', 14.5, 'Bon exposé, timing à améliorer');
+
+-- 9. Insertion des remarques
+INSERT INTO remarques (contenu, apprenti_id) VALUES
+('À suivre particulièrement sur l''amélioration de la couverture de tests', 1),
+('Très autonome, excellente capacité d''analyse', 2),
+('Proactif dans la résolution des problèmes techniques', 3);
+
+-- 10. Insertion des tuteurs enseignants
+INSERT INTO tuteur_enseignant (nom, prenom, email, telephone) VALUES
+('Lefebvre', 'Marie', 'marie.lefebvre@asta-education.fr', '0612345678'),
+('Fournier', 'Pierre', 'pierre.fournier@asta-education.fr', '0623456789'),
+('Mercier', 'Isabelle', 'isabelle.mercier@asta-education.fr', '0634567890');
+
+-- 11. Insertion des feedbacks tuteurs
+INSERT INTO feedback_tuteur (commentaires, tuteur_enseignant_id, apprenti_id) VALUES
+('Excellent investissement dans le projet d''entreprise, bon équilibre entre théorie et pratique', 1, 1),
+('Progression remarquable en data science, très bonnes capacités d''abstraction', 2, 2),
+('Très bon développeur, à encourager à prendre plus d''initiatives dans l''équipe', 3, 3);
