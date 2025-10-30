@@ -1,10 +1,12 @@
-package com.pam.asta.modele.Apprenti;
+package com.pam.asta.modele;
 
-import com.pam.asta.modele.Entreprise;
-import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignant;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "apprenti")
 public class Apprenti {
@@ -34,6 +36,9 @@ public class Apprenti {
     @Column(name = "telephone", length = 10)
     private String telephone;
 
+    @Column(name = "archive", nullable = false)
+    private Boolean archive = false;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "entreprise_id", nullable = false)
     private Entreprise entreprise;
@@ -41,10 +46,6 @@ public class Apprenti {
     @ColumnDefault("0")
     @Column(name = "archive")
     private Boolean archive;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tuteur_enseignant_id")
-    private TuteurEnseignant tuteurEnseignant;
 
     public Integer getId() {
         return id;
@@ -70,68 +71,8 @@ public class Apprenti {
         this.anneeAcademique = anneeAcademique;
     }
 
-    public String getMajeure() {
-        return majeure;
-    }
-
-    public void setMajeure(String majeure) {
-        this.majeure = majeure;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public Entreprise getEntreprise() {
-        return entreprise;
-    }
-
-    public void setEntreprise(Entreprise entreprise) {
-        this.entreprise = entreprise;
-    }
-
-    public Boolean getArchive() {
-        return archive;
-    }
-
-    public void setArchive(Boolean archive) {
-        this.archive = archive;
-    }
-
-    public TuteurEnseignant getTuteurEnseignant() {
-        return tuteurEnseignant;
-    }
-
-    public void setTuteurEnseignant(TuteurEnseignant tuteurEnseignant) {
-        this.tuteurEnseignant = tuteurEnseignant;
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "maitre_apprentissage", nullable = false)
+    private MaitreApprentissage maitreApprentissage;
 
 }

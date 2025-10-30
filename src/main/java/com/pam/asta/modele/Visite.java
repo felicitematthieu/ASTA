@@ -2,14 +2,19 @@ package com.pam.asta.modele;
 
 import com.pam.asta.modele.Apprenti.Apprenti;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "visite")
 public class Visite {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -25,47 +30,8 @@ public class Visite {
     private String formatVisite;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "apprenti_id")
     private Apprenti apprenti;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCommentaires() {
-        return commentaires;
-    }
-
-    public void setCommentaires(String commentaires) {
-        this.commentaires = commentaires;
-    }
-
-    public LocalDate getDateVisite() {
-        return dateVisite;
-    }
-
-    public void setDateVisite(LocalDate dateVisite) {
-        this.dateVisite = dateVisite;
-    }
-
-    public String getFormatVisite() {
-        return formatVisite;
-    }
-
-    public void setFormatVisite(String formatVisite) {
-        this.formatVisite = formatVisite;
-    }
-
-    public Apprenti getApprenti() {
-        return apprenti;
-    }
-
-    public void setApprenti(Apprenti apprenti) {
-        this.apprenti = apprenti;
-    }
 
 }
