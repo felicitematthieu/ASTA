@@ -73,6 +73,82 @@
 </table>
 
 </main>
+<script>
+    (function() {
+        const searchInput = document.querySelector('input[name="search"]');
+        const anneeSelect = document.getElementById('annee');
+        const resultsContainer = document.getElementById('results');
+
+        if (!resultsContainer) return;
+
+        function buildUrl() {
+            const params = new URLSearchParams();
+            const s = (searchInput && searchInput.value) ? searchInput.value : '';
+            const a = (anneeSelect && anneeSelect.value) ? anneeSelect.value : '';
+            if (s) params.set('search', s);
+            if (a) params.set('annee', a);
+            return '/home' + (params.toString() ? ('?' + params.toString()) : '');
+        }
+
+        let debounceTimer = null;
+        function debounce(fn, delay) {
+            return function(...args) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => fn.apply(this, args), delay);
+            }
+        }
+
+        async function fetchAndReplace() {
+            const url = buildUrl();
+            try {
+                const resp = await fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (!resp.ok) return;
+                const text = await resp.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const newResults = doc.getElementById('results');
+                if (newResults) {
+                    resultsContainer.innerHTML = newResults.innerHTML;
+                } else {
+                    // fallback: try to extract the table body
+                    const newTbody = doc.querySelector('#apprentisTable tbody');
+                    if (newTbody) {
+                        const oldTbody = document.querySelector('#apprentisTable tbody');
+                        if (oldTbody) oldTbody.innerHTML = newTbody.innerHTML;
+                    }
+                }
+                // mettre à jour l'URL sans recharger
+                history.replaceState(null, '', url);
+            } catch (e) {
+                console.error('Erreur lors du rechargement des résultats :', e);
+            }
+        }
+
+        const debouncedFetch = debounce(fetchAndReplace, 400);
+
+        if (searchInput) {
+            searchInput.addEventListener('input', debouncedFetch);
+            // aussi pour Enter key - laisse le bouton fonctionner normalement
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    fetchAndReplace();
+                }
+            });
+        }
+
+        if (anneeSelect) {
+            // on change, on recharge
+            anneeSelect.addEventListener('change', (e) => {
+                if (e && e.preventDefault) e.preventDefault();
+                fetchAndReplace();
+            });
+        }
+
+    })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
