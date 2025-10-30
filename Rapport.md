@@ -5,11 +5,12 @@
 3.2. Informations relatives à l’outillage :
 - IDE UTILISÉ : IntelliJ
 - SGBD CHOISI : MariaDB 10.4.32
+- Script SQL pour recréer les tables : bd.sql
 
 3.3. Informations utiles pour lancer et tester l’application :
 - Se rendre sur la page : http://localhost:8080/login
 - Entrer le LOGIN et le MOT DE PASSE
-- Se rediriger ensuite sur la page : http://localhost:8080/home pour naviguer
+- L'utilisateur est redirigé ensuite sur la page : http://localhost:8080/home pour naviguer
 
 
 3.4. Questions :
