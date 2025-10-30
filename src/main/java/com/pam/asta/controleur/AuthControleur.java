@@ -36,27 +36,30 @@ public class AuthControleur {
     }
 
     @GetMapping("/home")
-    public String homePage(Authentication authentication, @RequestParam(value = "annee", required = false) String annee, Model model) {
+    public String homePage(Authentication authentication,
+                           @RequestParam(value = "annee", required = false) String annee,
+                           @RequestParam(value = "search", required = false) String search,
+                           Model model) {
+
         String email = authentication.getName();
-
         TuteurEnseignant tuteur = tuteurEnseignantRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable : " + email));
+                .orElseThrow(() -> new RuntimeException("Tuteur non trouvé : " + email));
 
-        List<String> anneesDisponibles = List.of(
-                "2022-2023",
-                "2023-2024",
-                "2024-2025",
-                "2025-2026"
-        );
-
+        List<String> anneesDisponibles = List.of("2022-2023", "2023-2024", "2024-2025");
         String anneeSelectionnee = (annee != null) ? annee : "2024-2025";
 
-        List<Apprenti> apprentis = apprentiService.getApprentisPourTuteurAnneeCourante(tuteur, anneeSelectionnee);
+        List<Apprenti> apprentis;
+        if (search != null && !search.isEmpty()) {
+            apprentis = apprentiService.rechercherApprentisGlobale(tuteur, search);
+        } else {
+            apprentis = apprentiService.getApprentisPourTuteurAnneeCourante(tuteur, anneeSelectionnee);
+        }
 
         model.addAttribute("prenom", tuteur.getPrenom());
         model.addAttribute("apprentis", apprentis);
         model.addAttribute("annees", anneesDisponibles);
         model.addAttribute("anneeSelectionnee", anneeSelectionnee);
+        model.addAttribute("search", search);
 
         return "home";
     }
