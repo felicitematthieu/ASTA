@@ -1,12 +1,15 @@
 package com.pam.asta.controleur.Apprenti;
 
+import com.pam.asta.exceptions.ApprentiNonTrouveException;
 import com.pam.asta.modele.Apprenti.Apprenti;
 import com.pam.asta.modele.Apprenti.ApprentiRepository;
 import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignant;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApprentiService {
@@ -19,7 +22,9 @@ public class ApprentiService {
 
     public List<Apprenti> getApprentisPourTuteurAnneeCourante(TuteurEnseignant tuteurEnseignant, String annee) {
         return apprentiRepository.findByTuteurAndAnneeAcademique(tuteurEnseignant, annee);
-    }@Transactional
+    }
+
+    @Transactional
     public void ajouterApprenti(Apprenti apprenti) {
         apprenti.setArchive(false);
         apprentiRepository.save(apprenti);
@@ -55,5 +60,24 @@ public class ApprentiService {
 
     public List<Apprenti> getApprentisActifs() {
         return apprentiRepository.findByArchiveFalse();
+    }
+
+    public Optional<Apprenti> getUnApprenti(Integer idApprenti) {
+        Optional<Apprenti> unApprenti = apprentiRepository.findById(idApprenti);
+
+        return Optional.ofNullable(
+                unApprenti.orElseThrow(
+                        () -> new ApprentiNonTrouveException(
+                                "Le programmeur dont l\'id est " + idApprenti + " n\'existe pas")));
+    }
+
+    @Transactional
+    public void modifierApprenti(Integer idApprenti, Apprenti apprentiModified) {
+        Apprenti apprentiToModify = apprentiRepository.findById(idApprenti).orElseThrow();
+
+        if (apprentiToModify != null) {
+            BeanUtils.copyProperties(apprentiModified, apprentiToModify, "id");
+            apprentiRepository.save(apprentiToModify);
+        }
     }
 }
