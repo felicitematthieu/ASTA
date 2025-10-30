@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ApprentiRepository extends JpaRepository<Apprenti, Integer>{
-    List<Apprenti> findByTuteurAndAnneeAcademique(TuteurEnseignant tuteur, String annee);
+    List<Apprenti> findByTuteurAndAnneeAcademiqueAndArchiveFalse(TuteurEnseignant tuteur, String annee);
 
     List<Apprenti> findByProgrammeAndArchiveFalse(String programme);
 

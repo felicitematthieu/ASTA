@@ -21,7 +21,7 @@ public class ApprentiService {
     }
 
     public List<Apprenti> getApprentisPourTuteurAnneeCourante(TuteurEnseignant tuteurEnseignant, String annee) {
-        return apprentiRepository.findByTuteurAndAnneeAcademique(tuteurEnseignant, annee);
+        return apprentiRepository.findByTuteurAndAnneeAcademiqueAndArchiveFalse(tuteurEnseignant, annee);
     }@Transactional
     public void ajouterApprenti(Apprenti apprenti) {
         apprenti.setArchive(false);
