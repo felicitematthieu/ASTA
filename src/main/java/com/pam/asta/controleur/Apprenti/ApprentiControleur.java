@@ -37,7 +37,7 @@ public class ApprentiControleur {
     public String creerApprenti(@ModelAttribute("nouvelApprenti") Apprenti apprenti, RedirectAttributes redirectAttributes) {
         apprentiservice.ajouterApprenti(apprenti);
         redirectAttributes.addAttribute("success", true);
-        return "redirect:/ASTA/ajouterApprenti";
+        return "redirect:/home";
     }
 
     @GetMapping("/nouvelleAnnee")
@@ -48,6 +48,6 @@ public class ApprentiControleur {
     @PostMapping("/nouvelleAnnee")
     public String creerNouvelleAnnee(@RequestParam("annee") String annee) {
         apprentiservice.creerNouvelleAnneeAcademique(annee);
-        return "redirect:/ASTA/nouvelleAnnee";
+        return "redirect:/home";
     }
 }

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS tuteur_enseignant (
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(255),
-    telephone VARCHAR(10) CHECK (telephone REGEXP '^[0-9]{10}$')
+    telephone VARCHAR(10) CHECK (telephone REGEXP '^[0-9]{10}$'),
     password VARCHAR(255) NOT NULL
 );
 
@@ -127,10 +127,10 @@ INSERT INTO entreprise (raison_sociale, adresse, informations_acces) VALUES
 ('WebCraft Studio', '78 Boulevard Haussmann, 13006 Marseille', 'Badge permanent, tour sud, étage 7');
 
 -- 10. Insertion des tuteurs enseignants
-INSERT INTO tuteur_enseignant (nom, prenom, email, telephone) VALUES
-('Lefebvre', 'Marie', 'marie.lefebvre@asta-education.fr', '0612345678', {noop}1234),
-('Fournier', 'Pierre', 'pierre.fournier@asta-education.fr', '0623456789', {noop}1234),
-('Mercier', 'Isabelle', 'isabelle.mercier@asta-education.fr', '0634567890', {noop}1234);
+INSERT INTO tuteur_enseignant (nom, prenom, email, telephone,password) VALUES
+('Lefebvre', 'Marie', 'marie.lefebvre@asta-education.fr', '0612345678',"1234"),
+('Fournier', 'Pierre', 'pierre.fournier@asta-education.fr', '0623456789', "1234"),
+('Mercier', 'Isabelle', 'isabelle.mercier@asta-education.fr', '0634567890', "1234");
 
 -- 3. Insertion des maîtres d'apprentissage
 INSERT INTO maitre_apprentissage (nom, prenom, poste, email, telephone, remarques, entreprise_id) VALUES

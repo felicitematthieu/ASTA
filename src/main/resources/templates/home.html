@@ -24,16 +24,25 @@
 
 <h2>Tableau de bord - Année <span th:text="${annee}"></span></h2>
 
-<form method="get" th:action="@{/home}">
-    <label for="annee">Année académique :</label>
-    <select id="annee" name="annee" onchange="this.form.submit()">
-        <option th:each="a : ${annees}"
-                th:value="${a}"
-                th:text="${a}"
-                th:selected="${a == anneeSelectionnee}">
-        </option>
-    </select>
-</form>
+    <div class="d-flex gap-2 align-items-center">
+        <!-- Boutons d'action -->
+        <a th:href="@{/ASTA/ajouterApprenti}" class="btn btn-success btn-sm">
+            + Nouvel apprenti
+        </a>
+        <a th:href="@{/ASTA/nouvelleAnnee}" class="btn btn-primary btn-sm">
+            + Nouvelle année académique
+        </a>
+        <form method="get" th:action="@{/home}">
+            <label for="annee">Année académique :</label>
+            <select id="annee" name="annee" onchange="this.form.submit()">
+                <option th:each="a : ${annees}"
+                        th:value="${a}"
+                        th:text="${a}"
+                        th:selected="${a == anneeSelectionnee}">
+                </option>
+            </select>
+        </form>
+    </div>
 
 </div>
 
@@ -46,6 +55,7 @@
     <tr>
         <th>Nom</th>
         <th>Prénom</th>
+        <th>Actions</th>
 
     </tr>
     </thead>
@@ -53,6 +63,11 @@
     <tr th:each="a : ${apprentis}">
         <td th:text="${a.nom}"></td>
         <td th:text="${a.prenom}"></td>
+        <td>
+            <a th:href="@{/ASTA/detailsApprenti/{id}(id=${a.id})}" class="btn btn-sm btn-primary">
+                Voir détails
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>
