@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("ASTA")
 public class ApprentiControleur {
@@ -49,5 +51,29 @@ public class ApprentiControleur {
     public String creerNouvelleAnnee(@RequestParam("annee") String annee) {
         apprentiservice.creerNouvelleAnneeAcademique(annee);
         return "redirect:/home";
+    }
+
+    @GetMapping("/detailsApprenti/{idApprenti}")
+    public String afficherDetailsApprenti(@PathVariable("idApprenti") Integer idApprenti, Model model) {
+        Optional<Apprenti> apprenti = apprentiservice.getUnApprenti(idApprenti);
+        model.addAttribute("apprenti", apprenti.orElseThrow());
+        model.addAttribute("entreprises", entrepriseRepository.findAll());
+        model.addAttribute("maitres", maitreApprentissageRepository.findAll());
+        model.addAttribute("tuteurs", tuteurEnseignantRepository.findAll());
+        return "detailsApprenti";
+    }
+
+    @PostMapping("/modifierApprenti/{idApprenti}")
+    public String modifierApprenti(@PathVariable Integer idApprenti,
+                                   @ModelAttribute Apprenti apprentiModified,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            apprentiservice.modifierApprenti(idApprenti, apprentiModified);
+            redirectAttributes.addAttribute("success", true);
+        } catch (Exception e) {
+            redirectAttributes.addAttribute("error", true);
+            redirectAttributes.addAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/ASTA/detailsApprenti/" + idApprenti;
     }
 }
