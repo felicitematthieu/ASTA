@@ -1,5 +1,7 @@
 package com.pam.asta.modele;
 
+import com.pam.asta.modele.Apprenti.Apprenti;
+import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignant;
 import jakarta.persistence.*;
 
 @Entity

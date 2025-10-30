@@ -1,4 +1,4 @@
-package com.pam.asta.modele;
+package com.pam.asta.modele.TuteurEnseignant;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;

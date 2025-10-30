@@ -1,7 +1,7 @@
 package com.pam.asta.controleur.TuteurEnseignant;
 
-import com.pam.asta.modele.TuteurEnseignant;
-import com.pam.asta.modele.TuteurEnseignantRepository;
+import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignant;
+import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignantRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +15,10 @@ public class TuteurEnseignantService implements UserDetailsService {
 
     public TuteurEnseignantService(TuteurEnseignantRepository tuteurEnseignantRepository) {
         this.tuteurEnseignantRepository = tuteurEnseignantRepository;
+    }
+
+    public TuteurEnseignant findByEmail(String email) {
+        return tuteurEnseignantRepository.findByEmail(email).orElse(null);
     }
 
     @Override
