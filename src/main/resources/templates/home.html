@@ -6,8 +6,13 @@
 </head>
 <body>
 <div style="text-align:right">
-    Bonjour <span sec:authentication="name"></span> |
-    <a th:href="@{/logout}">Déconnectez-vous</a>
+    Bonjour <span th:text="${prenom}"></span> |
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit"
+                style="background:none;border:none;color:blue;cursor:pointer;text-decoration:underline;">
+            Déconnectez-vous
+        </button>
+    </form>
 </div>
 
 <h1>Bienvenue sur la page d'accueil</h1>

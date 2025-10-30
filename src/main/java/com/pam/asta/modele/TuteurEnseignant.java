@@ -22,6 +22,9 @@ public class TuteurEnseignant {
     @Column(name = "telephone", length = 10)
     private String telephone;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     public Integer getId() {
         return id;
     }
@@ -60,6 +63,14 @@ public class TuteurEnseignant {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
