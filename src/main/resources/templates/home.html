@@ -55,7 +55,7 @@
     La liste est vide. Ajoutez au moins un apprenti.
 </div>
 
-<table th:if="${!#lists.isEmpty(apprentis)}" class="table table-striped table-hover table-bordered">
+<table th:if="${!#lists.isEmpty(apprentis)}" id="apprentisTable" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
         <th>Nom</th>
