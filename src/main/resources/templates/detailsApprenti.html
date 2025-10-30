@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTA - Détails de l'apprenti</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .btn-back {
+            background-color: white;
+            color: #6c757d;
+            border: 1px solid #d0d0d0;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            text-decoration: none;
+            border-color: #adb5bd;
+        }
+
+        .apprenti-name {
+            font-size: 20px;
+            color: #7f8c8d;
+            margin: 0;
+        }
+
+        .card-form {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .alert {
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-success::before {
+            content: "✓";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-danger::before {
+            content: "✕";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: block;
+        }
+
+        .form-control {
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+            outline: none;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+            height: auto;
+            min-height: 46px;
+            line-height: 1.5;
+        }
+
+        .btn-group-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #4a90e2;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background-color: #357abd;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #6c757d;
+            border: 1px solid #d0d0d0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+            color: #6c757d;
+            text-decoration: none;
+        }
+
+        .info-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-left: 12px;
+        }
+
+        .badge-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-archived {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Mode lecture seule */
+        .readonly-mode .form-section-content {
+            display: block;
+        }
+
+        .readonly-mode .edit-mode-content {
+            display: none;
+        }
+
+        /* Mode édition */
+        .edit-mode .form-section-content {
+            display: none;
+        }
+
+        .edit-mode .edit-mode-content {
+            display: block;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .info-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .btn-group-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<!--/* @thymesVar id="apprenti" type="com.pam.asta.modele.Apprenti" */-->
+<div class="main-container">
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <h1>Détails de l'apprenti</h1>
+                <p class="apprenti-name" th:text="${apprenti.prenom + ' ' + apprenti.nom}"></p>
+            </div>
+            <a href="/ASTA/apprentis" class="btn-back"> Retour à la liste</a>
+        </div>
+    </div>
+
+    <!-- Message de succès -->
+    <div th:if="${param.success != null}" class="alert alert-success">
+        <span>Modification réussie ! Les informations de l'apprenti ont été mises à jour.</span>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div th:if="${param.error != null}" class="alert alert-danger">
+        <div>
+            <strong>Échec de la modification</strong>
+            <div th:if="${param.errorMessage != null}" th:text="${param.errorMessage}"></div>
+            <div th:unless="${param.errorMessage != null}">Une erreur s'est produite lors de la modification.</div>
+        </div>
+    </div>
+
+    <div class="card-form readonly-mode" id="apprentiCard">
+        <!-- Mode lecture seule -->
+        <div class="form-section-content">
+            <!-- Informations personnelles -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    Informations personnelles
+                    <span class="info-badge" th:classappend="${apprenti.archive} ? 'badge-archived' : 'badge-active'"
+                          th:text="${apprenti.archive} ? 'Archivé' : 'Actif'"></span>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Nom</div>
+                    <div class="info-value" th:text="${apprenti.nom}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Prénom</div>
+                    <div class="info-value" th:text="${apprenti.prenom}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value" th:text="${apprenti.email}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Téléphone</div>
+                    <div class="info-value" th:text="${apprenti.telephone}"></div>
+                </div>
+            </div>
+
+            <!-- Informations académiques -->
+            <div class="form-section">
+                <div class="form-section-title">Informations académiques</div>
+
+                <div class="info-row">
+                    <div class="info-label">Programme</div>
+                    <div class="info-value" th:text="${apprenti.programme}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Majeure</div>
+                    <div class="info-value" th:text="${apprenti.majeure}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Année académique</div>
+                    <div class="info-value" th:text="${apprenti.anneeAcademique}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Tuteur enseignant</div>
+                    <div class="info-value" th:text="${apprenti.tuteur != null ? apprenti.tuteur.prenom + ' ' + apprenti.tuteur.nom : 'Non défini'}"></div>
+                </div>
+            </div>
+
+            <!-- Informations entreprise -->
+            <div class="form-section">
+                <div class="form-section-title">Informations entreprise</div>
+
+                <div class="info-row">
+                    <div class="info-label">Entreprise</div>
+                    <div class="info-value" th:text="${apprenti.entreprise != null ? apprenti.entreprise.raisonSociale : 'Non définie'}"></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Maître d'apprentissage</div>
+                    <div class="info-value" th:text="${apprenti.maitreApprentissage != null ? apprenti.maitreApprentissage.prenom + ' ' + apprenti.maitreApprentissage.nom : 'Non défini'}"></div>
+                </div>
+            </div>
+
+            <div class="btn-group-actions">
+                <button type="button" class="btn btn-primary" onclick="enableEditMode()">Modifier</button>
+                <a href="/ASTA/apprentis" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+
+        <!-- Mode édition -->
+        <div class="edit-mode-content">
+            <form th:action="@{/ASTA/modifierApprenti/{id}(id=${apprenti.id})}" th:object="${apprenti}" method="POST">
+
+                <!-- Informations personnelles -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        Informations personnelles
+                        <span class="info-badge" th:classappend="${apprenti.archive} ? 'badge-archived' : 'badge-active'"
+                              th:text="${apprenti.archive} ? 'Archivé' : 'Actif'">Actif</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nom" class="required">Nom</label>
+                        <input type="text" id="nom" th:field="*{nom}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prenom" class="required">Prénom</label>
+                        <input type="text" id="prenom" th:field="*{prenom}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="required">Email</label>
+                        <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone" class="required">Téléphone</label>
+                        <input type="tel" id="telephone" th:field="*{telephone}" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- Informations académiques -->
+                <div class="form-section">
+                    <div class="form-section-title">Informations académiques</div>
+
+                    <div class="form-group">
+                        <label for="programme" class="required">Programme</label>
+                        <select id="programme" th:field="*{programme}" class="form-control" required>
+                            <option value="">-- Sélectionner un programme --</option>
+                            <option value="I1">I1</option>
+                            <option value="I2">I2</option>
+                            <option value="I3">I3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="majeure" class="required">Majeure</label>
+                        <input type="text" id="majeure" th:field="*{majeure}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anneeAcademique" class="required">Année académique</label>
+                        <input type="text" id="anneeAcademique" th:field="*{anneeAcademique}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tuteur" class="required">Tuteur enseignant</label>
+                        <select id="tuteur" th:field="*{tuteur.id}" class="form-control" required>
+                            <option value="">-- Choisir un tuteur --</option>
+                            <option th:each="t : ${tuteurs}"
+                                    th:value="${t.id}"
+                                    th:text="${t.prenom} + ' ' + ${t.nom}">
+                                Tuteur
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Informations entreprise -->
+                <div class="form-section">
+                    <div class="form-section-title">Informations entreprise</div>
+
+                    <div class="form-group">
+                        <label for="entreprise" class="required">Entreprise</label>
+                        <select id="entreprise" th:field="*{entreprise.id}" class="form-control" required>
+                            <option value="">-- Choisir une entreprise --</option>
+                            <option th:each="ent : ${entreprises}"
+                                    th:value="${ent.id}"
+                                    th:text="${ent.raisonSociale}">
+                                Entreprise
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maitre" class="required">Maître d'apprentissage</label>
+                        <select id="maitre" th:field="*{maitreApprentissage.id}" class="form-control" required>
+                            <option value="">-- Choisir un maître d'apprentissage --</option>
+                            <option th:each="m : ${maitres}"
+                                    th:value="${m.id}"
+                                    th:text="${m.prenom} + ' ' + ${m.nom}">
+                                Maître
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="btn-group-actions">
+                    <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script>
+    function enableEditMode() {
+        document.getElementById('apprentiCard').classList.remove('readonly-mode');
+        document.getElementById('apprentiCard').classList.add('edit-mode');
+    }
+
+    function cancelEdit() {
+        document.getElementById('apprentiCard').classList.remove('edit-mode');
+        document.getElementById('apprentiCard').classList.add('readonly-mode');
+    }
+
+    // Auto-masquer les alertes après 60 secondes
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert-success, .alert-danger');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500);
+            }, 30000);
+        });
+    });
+</script>
+</body>
+</html>
