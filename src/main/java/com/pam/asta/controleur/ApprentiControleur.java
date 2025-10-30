@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 import com.pam.asta.service.ApprentiService;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("ASTA")
@@ -35,8 +36,9 @@ public class ApprentiControleur {
     }
 
     @PostMapping("/ajouterApprenti")
-    public String creerApprenti(@ModelAttribute("nouvelApprenti") Apprenti apprenti) {
+    public String creerApprenti(@ModelAttribute("nouvelApprenti") Apprenti apprenti, RedirectAttributes redirectAttributes) {
         apprentiservice.ajouterApprenti(apprenti);
+        redirectAttributes.addAttribute("success", true);
         return "redirect:/ASTA/ajouterApprenti";
     }
 
