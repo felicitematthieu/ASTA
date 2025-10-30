@@ -1,5 +1,8 @@
-package com.pam.asta.modele;
+package com.pam.asta.modele.Apprenti;
 
+import com.pam.asta.modele.Entreprise;
+import com.pam.asta.modele.MaitreApprentissage;
+import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignant;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,40 +39,17 @@ public class Apprenti {
     @Column(name = "telephone", length = 10)
     private String telephone;
 
-    @Column(name = "archive", nullable = false)
-    private Boolean archive = false;
+    @ColumnDefault("0")
+    @Column(name = "archive")
+    private Boolean archive;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "entreprise_id", nullable = false)
     private Entreprise entreprise;
 
-    @ColumnDefault("0")
-    @Column(name = "archive")
-    private Boolean archive;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getProgramme() {
-        return programme;
-    }
-
-    public void setProgramme(String programme) {
-        this.programme = programme;
-    }
-
-    public String getAnneeAcademique() {
-        return anneeAcademique;
-    }
-
-    public void setAnneeAcademique(String anneeAcademique) {
-        this.anneeAcademique = anneeAcademique;
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tuteur_id", nullable = false)
+    private TuteurEnseignant tuteur;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "maitre_apprentissage", nullable = false)

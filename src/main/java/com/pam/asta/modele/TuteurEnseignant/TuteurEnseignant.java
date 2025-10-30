@@ -1,9 +1,6 @@
-package com.pam.asta.modele;
+package com.pam.asta.modele.TuteurEnseignant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Table(name = "tuteur_enseignant")
 public class TuteurEnseignant {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -27,5 +25,8 @@ public class TuteurEnseignant {
 
     @Column(name = "telephone", length = 10)
     private String telephone;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
 }
