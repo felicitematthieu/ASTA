@@ -1,18 +1,24 @@
 package com.pam.asta.modele;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "memoire_evaluation")
 public class MemoireEvaluation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "evaluation_id")
     private EvaluationEcole evaluation;
 
@@ -26,45 +32,5 @@ public class MemoireEvaluation {
     @Lob
     @Column(name = "commentaires")
     private String commentaires;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public EvaluationEcole getEvaluation() {
-        return evaluation;
-    }
-
-    public void setEvaluation(EvaluationEcole evaluation) {
-        this.evaluation = evaluation;
-    }
-
-    public String getThemeSujet() {
-        return themeSujet;
-    }
-
-    public void setThemeSujet(String themeSujet) {
-        this.themeSujet = themeSujet;
-    }
-
-    public BigDecimal getNote() {
-        return note;
-    }
-
-    public void setNote(BigDecimal note) {
-        this.note = note;
-    }
-
-    public String getCommentaires() {
-        return commentaires;
-    }
-
-    public void setCommentaires(String commentaires) {
-        this.commentaires = commentaires;
-    }
 
 }

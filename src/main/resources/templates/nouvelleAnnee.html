@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ASTA - Nouvelle année académique</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Ajouter une nouvelle année académique</h1>
+
+    <!-- Message de confirmation -->
+    <div th:if="${param.success != null}" class="alert alert-success">
+        L'année académique a été créée avec succès !
+    </div>
+
+    <form th:action="@{/ASTA/nouvelleAnnee}" method="post">
+        <div class="form-group">
+            <label for="annee">Nouvelle année académique :</label>
+            <input type="text" id="annee" name="annee" placeholder="Ex: 2025-2026" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Créer la nouvelle année</button>
+    </form>
+
+</div>
+</body>
+</html>
