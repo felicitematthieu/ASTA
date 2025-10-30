@@ -78,4 +78,8 @@ public class ApprentiService {
             apprentiRepository.save(apprentiToModify);
         }
     }
+
+    public List<Apprenti> rechercherApprentisGlobale(TuteurEnseignant tuteur, String query) {
+        return apprentiRepository.searchApprentisGlobale(tuteur, query);
+    }
 }
