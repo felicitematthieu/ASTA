@@ -46,6 +46,11 @@
 
 </div>
 
+<form method="get" th:action="@{/home}" class="d-flex align-items-center justify-content-between gap-4 mb-3">
+    <label for="searchInput" class="visually-hidden">Recherche</label>
+    <input id="searchInput" type="text" name="search" th:value="${search}" placeholder="Rechercher un apprenti, une entreprise ou une mission..." class="w-100" aria-label="Recherche">
+</form>
+
 <div th:if="${#lists.isEmpty(apprentis)}" class="text-danger">
     La liste est vide. Ajoutez au moins un apprenti.
 </div>
