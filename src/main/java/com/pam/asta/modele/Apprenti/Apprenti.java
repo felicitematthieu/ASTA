@@ -1,5 +1,7 @@
-package com.pam.asta.modele;
+package com.pam.asta.modele.Apprenti;
 
+import com.pam.asta.modele.Entreprise;
+import com.pam.asta.modele.TuteurEnseignant.TuteurEnseignant;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -39,6 +41,10 @@ public class Apprenti {
     @ColumnDefault("0")
     @Column(name = "archive")
     private Boolean archive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tuteur_enseignant_id")
+    private TuteurEnseignant tuteurEnseignant;
 
     public Integer getId() {
         return id;
@@ -118,6 +124,14 @@ public class Apprenti {
 
     public void setArchive(Boolean archive) {
         this.archive = archive;
+    }
+
+    public TuteurEnseignant getTuteurEnseignant() {
+        return tuteurEnseignant;
+    }
+
+    public void setTuteurEnseignant(TuteurEnseignant tuteurEnseignant) {
+        this.tuteurEnseignant = tuteurEnseignant;
     }
 
 }
